@@ -12,7 +12,7 @@ Email: joseph.eggers@csu.fullerton.edu
 
 #include "game.h"
 #include "game_element.h"
-#include "opponent.h"
+#include "opponentCharacter_/opponent.h"
 #include "playerCharacter_/player.h"
 
 int main() {

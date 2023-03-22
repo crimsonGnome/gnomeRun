@@ -16,7 +16,7 @@ Email: joseph.eggers@csu.fullerton.edu
 
 #include "../cpputils/graphics/image.h"
 #include "../game_element.h"
-#include "../opponent.h"
+#include "../opponentCharacter_/opponent.h"
 
 using graphics::Image, graphics::Color, std::string, std::vector;
 // Player

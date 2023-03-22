@@ -16,7 +16,7 @@ Email: joseph.eggers@csu.fullerton.edu
 #include <vector>
 
 #include "cpputils/graphics/image.h"
-#include "opponent.h"
+#include "opponentCharacter_/opponent.h"
 #include "playerCharacter_/player.h"
 
 using graphics::Image, std::cout, std::string, std::vector, std::unique_ptr;
@@ -25,14 +25,14 @@ using graphics::Image, std::cout, std::string, std::vector, std::unique_ptr;
 // ---------------- Start of Game Constructors ---------------------
 
 Game::Game() {
-  this->gameScreen_.Initialize(800, 600);
+  this->gameScreen_.Initialize(800, 700);
   Player crimsonGnome(375, 50);
   this->player_ = crimsonGnome;
 }
 
 Game::Game(int height, int width) {
   this->gameScreen_.Initialize(height, width);
-  Player crimsonGnome(375, 550);
+  Player crimsonGnome(375, 50);
   this->player_ = crimsonGnome;
 }
 // ---------------- End of Game Constructors -----------------------
@@ -276,13 +276,13 @@ void Game::OnMouseEvent(const graphics::MouseEvent& event) {
   Player& player = GetPlayer();
 
   if (event.GetMouseAction() == graphics::MouseAction::kDragged) {
-    if (x < 800 && x >= 0 && y >= 0 && y < 600) {
+    if (x < 800 && x >= 0 && y >= 0 && y < 700) {
       player.SetX(x - 10);
       player.SetY(y - 25);
       FirePlayerProjectile(player);
     }
   } else if (event.GetMouseAction() == graphics::MouseAction::kMoved) {
-    if (x < 800 && x >= 0 && y >= 0 && y < 600) {
+    if (x < 800 && x >= 0 && y >= 0 && y < 700) {
       player.SetX(x - 10);
       player.SetY(y - 25);
     }

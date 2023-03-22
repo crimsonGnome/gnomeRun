@@ -29,9 +29,6 @@ Player::Player() : GameElement(0, 0, 20, 50), playerImage_ {"playerCharacter_/gn
   this->playerImageCycle_ = 0;
   this->file_ = playerImage_[playerImageCycle_];
   
-  for(auto i = 0; i < playerImage_.size(); ++i){
-    cout << endl << playerImage_[i];
-  }
   // Draw Character
   
 }
@@ -66,7 +63,9 @@ void Player::Draw(Image& image) {
       // off setting by the middle to draw image
       int xOffSet = x_ + i;
       int yOffSet = y_ + j;
-
+      if(playerColor.Red() == 255 && playerColor.Green() == 255 && playerColor.Blue() == 255){
+        continue;
+      }
       // Getting the image to draw on the location
       // only Draw Image if its range
       //if(playerColor.Red() == 0 && playerColor.Green() == 0 && playerColor.Blue() == 0 ) continue;
@@ -124,7 +123,7 @@ void PlayerProjectile::Draw(Image& image) {
   Image player;
   // Load Robot and Hide it so it Doesnt display
   player.Load(file_);
-  player.Hide();
+  //player.Hide();
   // ---------- Start of Variable Decleartion -----------
   // Constant Hieghts
   const int imgHeight = image.GetHeight();
@@ -140,8 +139,7 @@ void PlayerProjectile::Draw(Image& image) {
       // off setting by the middle to draw image
       int xOffSet = x_ + i;
       int yOffSet = y_ + j;
-
-      if(playerColor.Red() == 0 && playerColor.Green() == 0 && playerColor.Blue() == 0) continue;
+      
       // Getting the image to draw on the location
       // only Draw Image if its range
       if ((xOffSet < imgWidth && xOffSet >= 0) &&
