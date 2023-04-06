@@ -31,6 +31,7 @@ class Game : public graphics::AnimationEventListener,
   Player player_;
   int score_ = 0;
   bool status_ = true;
+  unsigned int gameScreenX_ = 0;
 
   // Private Function
   void FirePlayerProjectile(Player&);

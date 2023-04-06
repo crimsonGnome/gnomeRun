@@ -89,6 +89,8 @@ void Game::MoveGameElements() {
   vector<unique_ptr<PlayerProjectile>>& player_projectile =
       GetPlayerProjectiles();
   // Block owl movements move right or left
+  // TODO: ---------------------------------------------------------
+  // ---------------------------------------------------------
   if (opponent[opponent.size() - 1]->GetX() > 740) {
     for (int i = 0; i < opponent.size(); i++) {
       opponent[i]->SetMoveDirection(false);
@@ -102,9 +104,9 @@ void Game::MoveGameElements() {
   for (int i = 0; i < opponent.size(); i++) {
     opponent[i]->Move(image);
   }
-  for (int i = 0; i < opponent_projectile.size(); i++) {
-    opponent_projectile[i]->Move(image);
-  }
+  // for (int i = 0; i < opponent_projectile.size(); i++) {
+  //   opponent_projectile[i]->Move(image);
+  // }
   for (int i = 0; i < player_projectile.size(); i++) {
     player_projectile[i]->Move(image);
   }
@@ -140,6 +142,11 @@ void Game::FilterIntersections() {
       if (opponent[i]->IntersectsWith(player_projectile[j].get())) {
         player_projectile[j]->SetIsActive(false);
         opponent[i]->SetIsActive(false);
+        if(opponent[i]->GetIsEvil() == false){
+          for (int k = 0; k < opponent.size(); k++){
+             opponent[k]->SetIsEvil(true);
+          }
+        }
         if (player.GetIsActive()) {
           this->score_++;
         }
@@ -226,11 +233,11 @@ void Game::UpdateScreen() {
       }
     }
     // Loop over opponent projectile vector
-    for (int i = 0; i < opponent_projectile.size(); i++) {
-      if (opponent_projectile[i]->GetIsActive() == true) {
-        opponent_projectile[i]->Draw(image);
-      }
-    }
+    // for (int i = 0; i < opponent_projectile.size(); i++) {
+    //   if (opponent_projectile[i]->GetIsActive() == true) {
+    //     opponent_projectile[i]->Draw(image);
+    //   }
+    // }
     // Loop over player projectile vector
     for (int i = 0; i < player_projectile.size(); i++) {
       if (player_projectile[i]->GetIsActive() == true) {
@@ -262,8 +269,9 @@ void Game::OnAnimationStep() {
   if (opponent.size() == 0) {
     CreateOpponents();
   }
+  
   MoveGameElements();
-  LaunchProjectiles();
+  // LaunchProjectiles(); // Removing look 
   FilterIntersections();
   RemoveInactive();
   UpdateScreen();

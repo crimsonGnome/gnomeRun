@@ -36,7 +36,8 @@ Opponent::Opponent() : GameElement(0, 0, 50, 50), playerImage_ {"opponentCharact
 Opponent::Opponent(int startingX, int startingY)
     : GameElement(startingX, startingY, 50, 50), playerImage_ {"opponentCharacter_/greenboi1.bmp","opponentCharacter_/greenboi2.bmp","opponentCharacter_/greenboi3.bmp","opponentCharacter_/greenboi4.bmp",
                                                                 "opponentCharacter_/orangeboi1.bmp","opponentCharacter_/orangeboi2.bmp","opponentCharacter_/orangeboi3.bmp","opponentCharacter_/orangeboi4.bmp"                         
-  } {
+                                              } , evilImage_ {"opponentCharacter_/evilfairy1.bmp","opponentCharacter_/evilfairy2.bmp","opponentCharacter_/evilfairy3.bmp","opponentCharacter_/evilfairy4.bmp","opponentCharacter_/evilfairy5.bmp"}
+  {
   this->coordsUpdated_ = true;
   int temp = rand() % 25;
   this->launch_ = temp;
@@ -84,13 +85,25 @@ void Opponent::Draw(Image& image) {
   }
   this->coordsUpdated_ = false;
   this->playerPhase_ = playerPhase_ + 1;
-  if(playerPhase_ % 5 == 0){
-    int temp = playerImageCycle_;
-    temp = (temp + 1) % 4;
-    this->playerImageCycle_ = temp;
-    this->file_ = playerImage_[playerImageCycle_ +  (4 * colorModifier_)];
-  } 
-  if(playerPhase_ % 20 == 0) this->playerPhase_ = 0;
+
+  if(isEvil_){
+    if(playerPhase_ % 5 == 0){
+      int temp = playerImageCycle_;
+      temp = (temp + 1) % 5;
+      this->playerImageCycle_ = temp;
+      this->file_ = evilImage_[playerImageCycle_];
+    } 
+    if(playerPhase_ % 25 == 0) this->playerPhase_ = 0;
+  } else {
+    if(playerPhase_ % 5 == 0){
+      int temp = playerImageCycle_;
+      temp = (temp + 1) % 4;
+      this->playerImageCycle_ = temp;
+      this->file_ = playerImage_[playerImageCycle_ +  (4 * colorModifier_)];
+    } 
+    if(playerPhase_ % 20 == 0) this->playerPhase_ = 0;
+  }
+  
 }
 
 // Move Function Defined
