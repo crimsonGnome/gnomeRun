@@ -166,15 +166,15 @@ void Game::DrawBackgroundImage(){
       // off setting by the middle to draw image
       int yOffSet = backgroundY_ + i;
 
-      Color backgroundColor = background.GetColor(k, yOffSet % 2401);
+      Color backgroundColor = background.GetColor(k, yOffSet % 2400);
 
       image.SetColor(k, i, backgroundColor);
     }
   }
   this->backgroundY_ = backgroundY_ + 2;
 
-  if(backgroundY_ > 2400){
-    backgroundY_ = 0;
+  if(backgroundY_ >= 2400){
+    backgroundY_ = 1;
   }
 
 
