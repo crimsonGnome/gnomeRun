@@ -32,9 +32,12 @@ class Game : public graphics::AnimationEventListener,
   int score_ = 0;
   bool status_ = true;
   unsigned int gameScreenX_ = 0;
+  int backgroundY_ = 0;
+  int backgroundX_ = 0;
 
   // Private Function
   void FirePlayerProjectile(Player&);
+  void DrawBackgroundImage();
 
  public:
   // constructors

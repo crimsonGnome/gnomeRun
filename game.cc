@@ -123,7 +123,6 @@ void Game::FilterIntersections() {
       this->status_ = false;
     }
   }
-
   vector<unique_ptr<OpponentProjectile>>& opponent_projectile =
       GetOpponentProjectiles();
   // for opponent projectiles and player
@@ -153,6 +152,32 @@ void Game::FilterIntersections() {
       }
     }
   }
+}
+
+// Draw Background Image 
+void Game::DrawBackgroundImage(){
+  Image& image = GetGameScreen();
+  Image background;
+  background.Load("background.bmp");
+  
+  for(unsigned int i = 0; i < image.GetHeight(); ++i){
+    for(unsigned int k = 0; k < image.GetWidth(); ++k){
+      
+      // off setting by the middle to draw image
+      int yOffSet = backgroundY_ + i;
+
+      Color backgroundColor = background.GetColor(k, yOffSet % 2401);
+
+      image.SetColor(k, i, backgroundColor);
+    }
+  }
+  this->backgroundY_ = backgroundY_ + 2;
+
+  if(backgroundY_ > 2400){
+    backgroundY_ = 0;
+  }
+
+
 }
 
 void Game::RemoveInactive() {
@@ -209,7 +234,7 @@ void Game::LaunchProjectiles() {
 void Game::UpdateScreen() {
   Image& image = GetGameScreen();
   // Draw Screen white
-  image.DrawRectangle(0, 0, image.GetWidth(), image.GetHeight(), 255, 255, 255);
+  DrawBackgroundImage();
 
   // Intialize vectors objects to loop over
   vector<unique_ptr<Opponent>>& opponent = GetOpponents();
