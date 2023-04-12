@@ -14,18 +14,22 @@ Email: joseph.eggers@csu.fullerton.edu
 #include <memory>
 #include <string>
 #include <vector>
+#include <thread>
+#include <mutex>
 
 #include "cpputils/graphics/image.h"
 #include "opponentCharacter_/opponent.h"
 #include "playerCharacter_/player.h"
 
-using graphics::Image, std::cout, std::string, std::vector, std::unique_ptr;
+using graphics::Image, std::cout, std::string, std::vector, std::unique_ptr, std::thread;
 
 // ---------------- Start of game Class ----------------------------
 // ---------------- Start of Game Constructors ---------------------
 
+std::mutex image_mutex; 
+
 Game::Game() {
-  this->gameScreen_.Initialize(800, 700);
+  this->gameScreen_.Initialize(500, 800);
   Player crimsonGnome(375, 50);
   this->player_ = crimsonGnome;
 }
@@ -56,11 +60,11 @@ void Game::CreateOpponents() {
   // Init hoot hoots
 
   vector<unique_ptr<Opponent>>& opponentVector = opponent_;
-  unique_ptr<Opponent> owl0(new Opponent(200, 550));
-  unique_ptr<Opponent> owl1(new Opponent(300, 550));
-  unique_ptr<Opponent> owl2(new Opponent(400, 550));
-  unique_ptr<Opponent> owl3(new Opponent(500, 550));
-  unique_ptr<Opponent> owl4(new Opponent(600, 550));
+  unique_ptr<Opponent> owl0(new Opponent(100, 550));
+  unique_ptr<Opponent> owl1(new Opponent(200, 450));
+  unique_ptr<Opponent> owl2(new Opponent(300, 550));
+  unique_ptr<Opponent> owl3(new Opponent(350, 450));
+  unique_ptr<Opponent> owl4(new Opponent(400, 550));
 
   // Add hoot hoots to array
   opponentVector.push_back(move(owl0));
@@ -70,6 +74,23 @@ void Game::CreateOpponents() {
   opponentVector.push_back(move(owl4));
 
   UpdateScreen();
+}
+
+void BackgroundLoop(int start, int stop, Image& image, Image& background, int backgroundY_){
+  background.Load("background.bmp");
+  // thread 1 
+  const std::lock_guard<std::mutex> lock(image_mutex);
+    for(unsigned int i = start; i < stop; ++i){
+      for(unsigned int k = 0; k < image.GetWidth(); ++k){
+        
+        // off setting by the middle to draw image
+        int yOffSet = backgroundY_ + i;
+
+        Color backgroundColor = background.GetColor(k, yOffSet % 2400);
+
+        image.SetColor(k, i, backgroundColor);
+      }
+    }
 }
 
 void Game::Init() {
@@ -91,7 +112,7 @@ void Game::MoveGameElements() {
   // Block owl movements move right or left
   // TODO: ---------------------------------------------------------
   // ---------------------------------------------------------
-  if (opponent[opponent.size() - 1]->GetX() > 740) {
+  if (opponent[opponent.size() - 1]->GetX() > 440) {
     for (int i = 0; i < opponent.size(); i++) {
       opponent[i]->SetMoveDirection(false);
     }
@@ -158,25 +179,24 @@ void Game::FilterIntersections() {
 void Game::DrawBackgroundImage(){
   Image& image = GetGameScreen();
   Image background;
-  background.Load("background.bmp");
-  
-  for(unsigned int i = 0; i < image.GetHeight(); ++i){
-    for(unsigned int k = 0; k < image.GetWidth(); ++k){
-      
-      // off setting by the middle to draw image
-      int yOffSet = backgroundY_ + i;
+  int backgroundY = backgroundY_;
+  // thread 1 
+  thread th1(BackgroundLoop , 0, 800, std::ref(image), std::ref(background), backgroundY);
+  // thread th2(BackgroundLoop, 200, 400, std::ref(image), std::ref(background), backgroundY);
+  // thread th3(BackgroundLoop, 400, 600, std::ref(image), std::ref(background), backgroundY);
+  // thread th4(BackgroundLoop, 600, 800, std::ref(image), std::ref(background), backgroundY);
 
-      Color backgroundColor = background.GetColor(k, yOffSet % 2400);
+  th1.join();
+  // th2.join();
+  // th3.join();
+  // th4.join();
 
-      image.SetColor(k, i, backgroundColor);
-    }
-  }
+
+
   this->backgroundY_ = backgroundY_ + 2;
-
   if(backgroundY_ >= 2400){
-    backgroundY_ = 1;
+      backgroundY_ = 1;
   }
-
 
 }
 
@@ -309,13 +329,13 @@ void Game::OnMouseEvent(const graphics::MouseEvent& event) {
   Player& player = GetPlayer();
 
   if (event.GetMouseAction() == graphics::MouseAction::kDragged) {
-    if (x < 800 && x >= 0 && y >= 0 && y < 700) {
+    if (x < 500 && x >= 0 && y >= 0 && y < 800) {
       player.SetX(x - 10);
       player.SetY(y - 25);
       FirePlayerProjectile(player);
     }
   } else if (event.GetMouseAction() == graphics::MouseAction::kMoved) {
-    if (x < 800 && x >= 0 && y >= 0 && y < 700) {
+    if (x < 500 && x >= 0 && y >= 0 && y < 800) {
       player.SetX(x - 10);
       player.SetY(y - 25);
     }

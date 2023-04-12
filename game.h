@@ -39,6 +39,7 @@ class Game : public graphics::AnimationEventListener,
   void FirePlayerProjectile(Player&);
   void DrawBackgroundImage();
 
+
  public:
   // constructors
   Game();
