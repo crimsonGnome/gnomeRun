@@ -27,7 +27,6 @@ using graphics::Image, std::cout, std::string, std::vector, std::unique_ptr, std
 // ---------------- Start of Game Constructors ---------------------
 
 std::mutex image_mutex;
-std::mutex background_mutex;
 
 Game::Game() {
   this->gameScreen_.Initialize(500, 800);
@@ -89,7 +88,7 @@ void BackgroundLoop(int start, int stop, Image& image, Image& background, int ba
 
         Color backgroundColor = background.GetColor(k, yOffSet % 2400);
 
-        std::unique_lock<std::mutex> lockChild(image_mutex);
+        // std::unique_lock<std::mutex> lockChild(image_mutex);
         image.SetColor(k, i, backgroundColor);
         
       }
@@ -186,15 +185,15 @@ void Game::DrawBackgroundImage(){
   int backgroundY = backgroundY_;
   background.Load("background.bmp");
   // thread 1 
-  thread th1(BackgroundLoop , 0, 200, std::ref(image), std::ref(background), backgroundY);
-  thread th2(BackgroundLoop, 200, 400, std::ref(image), std::ref(background), backgroundY);
-  thread th3(BackgroundLoop, 400, 600, std::ref(image), std::ref(background), backgroundY);
-  thread th4(BackgroundLoop, 600, 800, std::ref(image), std::ref(background), backgroundY);
+  thread th1(BackgroundLoop , 0, 800, std::ref(image), std::ref(background), backgroundY);
+  // thread th2(BackgroundLoop, 200, 400, std::ref(image), std::ref(background), backgroundY);
+  // thread th3(BackgroundLoop, 400, 600, std::ref(image), std::ref(background), backgroundY);
+  // thread th4(BackgroundLoop, 600, 800, std::ref(image), std::ref(background), backgroundY);
 
   th1.join();
-  th2.join();
-  th3.join();
-  th4.join();
+  // th2.join();
+  // th3.join();
+  // th4.join();
 
 
 
