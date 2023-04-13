@@ -87,21 +87,21 @@ void Opponent::Draw(Image& image) {
   this->playerPhase_ = playerPhase_ + 1;
 
   if(isEvil_){
-    if(playerPhase_ % 5 == 0){
+    if(playerPhase_ % 1 == 0){
       int temp = playerImageCycle_;
       temp = (temp + 1) % 5;
       this->playerImageCycle_ = temp;
       this->file_ = evilImage_[playerImageCycle_];
     } 
-    if(playerPhase_ % 25 == 0) this->playerPhase_ = 0;
+    if(playerPhase_ % 5 == 0) this->playerPhase_ = 0;
   } else {
-    if(playerPhase_ % 5 == 0){
+    if(playerPhase_ % 2 == 0){
       int temp = playerImageCycle_;
       temp = (temp + 1) % 4;
       this->playerImageCycle_ = temp;
       this->file_ = playerImage_[playerImageCycle_ +  (4 * colorModifier_)];
     } 
-    if(playerPhase_ % 20 == 0) this->playerPhase_ = 0;
+    if(playerPhase_ % 8 == 0) this->playerPhase_ = 0;
   }
   
 }

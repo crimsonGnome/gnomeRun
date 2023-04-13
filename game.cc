@@ -185,17 +185,7 @@ void Game::DrawBackgroundImage(){
   int backgroundY = backgroundY_;
   background.Load("background.bmp");
   // thread 1 
-  thread th1(BackgroundLoop , 0, 800, std::ref(image), std::ref(background), backgroundY);
-  // thread th2(BackgroundLoop, 200, 400, std::ref(image), std::ref(background), backgroundY);
-  // thread th3(BackgroundLoop, 400, 600, std::ref(image), std::ref(background), backgroundY);
-  // thread th4(BackgroundLoop, 600, 800, std::ref(image), std::ref(background), backgroundY);
-
-  th1.join();
-  // th2.join();
-  // th3.join();
-  // th4.join();
-
-
+  BackgroundLoop( 0, 800, image, background, backgroundY);
 
   this->backgroundY_ = backgroundY_ + 2;
   if(backgroundY_ >= 2400){

@@ -80,13 +80,13 @@ void Player::Draw(Image& image) {
   this->coordsUpdated_ = false;
   // Code for icrementing the image
   this->playerPhase_ = playerPhase_ + 1;
-  if(playerPhase_ % 5 == 0){
+  if(playerPhase_ % 1 == 0){
     int temp = playerImageCycle_;
     temp = (temp + 1) % 4;
     this->playerImageCycle_ = temp;
     this->file_ = playerImage_[playerImageCycle_];
   } 
-  if(playerPhase_ % 20 == 0) this->playerPhase_ = 0;
+  if(playerPhase_ % 8 == 0) this->playerPhase_ = 0;
 }
 
 // Defining Move Function
