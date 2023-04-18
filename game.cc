@@ -110,6 +110,7 @@ void Game::MoveGameElements() {
   vector<unique_ptr<OpponentProjectile>>& opponent_projectile =
       GetOpponentProjectiles();
   Player& player = GetPlayer();
+  int playerx = player.GetX();
   vector<unique_ptr<PlayerProjectile>>& player_projectile =
       GetPlayerProjectiles();
   // Block owl movements move right or left
@@ -126,7 +127,12 @@ void Game::MoveGameElements() {
   }
   // Move all the images
   for (int i = 0; i < opponent.size(); i++) {
-    opponent[i]->Move(image);
+    if(opponent[i]->GetIsEvil()){
+      opponent[i]->MoveEvil(image, player.GetX(), player.GetY());
+    } else {
+      opponent[i]->Move(image);
+    }
+    
   }
   // for (int i = 0; i < opponent_projectile.size(); i++) {
   //   opponent_projectile[i]->Move(image);

@@ -121,6 +121,37 @@ void Opponent::Move(const Image& image) {
   this->y_--;
 }
 
+// Move Function Defined
+void Opponent::MoveEvil(const Image& image, int x, int y) {
+  if (IsOutOfBounds(image) == true) {
+    is_active_ = false;
+    return;
+  }
+  int moveY = random() % 3 + 1;
+
+  if (movingRight_) {
+    this->x_ = x_ + velocity_;
+  } else {
+    this->x_ = x_ - velocity_;
+  }
+
+  // moveY
+  if(moveY % 3 != 0){
+    if(y_ > y ){
+      this->y_ = y_ - velocity_;
+    } else {
+      this->y_ = y_ + velocity_;
+    }
+  } else {
+    if(y_ > y ){
+      this->y_ = y_ - ( 2 * velocity_);
+    } else {
+      this->y_ = y_ + ( 2 * velocity_);
+    }
+  }
+  
+}
+
 unique_ptr<OpponentProjectile> Opponent::LaunchProjectile() {
   if (counter_ % 25 == launch_) {
     unique_ptr<OpponentProjectile> opponent_projectile(
