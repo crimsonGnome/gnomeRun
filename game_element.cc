@@ -48,38 +48,40 @@ bool GameElement::IntersectsWith(GameElement* game_element) {
   int height_game_element = game_element->GetHeight();
   int x_game_element = game_element->GetX();
   int y_game_element = game_element->GetY();
-  int width_player = width_;
-  int height_player = height_;
-  int x_player = x_;
-  int y_player = y_;
+  int width_player = width_ - 15;
+  int height_player = height_ - 15;
+  int x_player = x_ + 15;
+  int y_player = y_ + 15;
+
   if (width_player > width_game_element) {
-    if (((width_game_element + x_game_element) - (width_player + x_player) >
-             -width_player &&
-         (width_game_element + x_game_element) - (width_player + x_player) <
-             width_player) &&
-        ((height_game_element + y_game_element) - (height_player + y_player) >
-             -height_player &&
-         (height_game_element + y_game_element) - (height_player + y_player) <
-             height_player)) {
-      return true;
+        //width and x position
+    if (((width_game_element + x_game_element) - (width_player + x_player) > - width_player &&
+         (width_game_element + x_game_element) - (width_player + x_player) < width_player) &&
+         //height and y position
+        ((height_game_element + y_game_element) - (height_player + y_player) > - height_player &&
+         (height_game_element + y_game_element) - (height_player + y_player) < height_player)) {
+          //characters overlap
+          return true;
     }
+    //Characters don't overlap
     return false;
   } else {
     // first if statment has to be player width (still have to change
     // and explain) Everyting else should be fine
-    if (((width_game_element + x_game_element) - (width_player + x_player) >
-             -width_player &&
-         (width_game_element + x_game_element) - (width_player + x_player) <
-             width_game_element) &&
-        ((height_game_element + y_game_element) - (height_player + y_player) >
-             -height_game_element &&
-         (height_game_element + y_game_element) - (height_player + y_player) <
-             height_game_element)) {
-      return true;
+        //width and x position
+    if (((width_game_element + x_game_element) - (width_player + x_player) > - width_player &&
+         (width_game_element + x_game_element) - (width_player + x_player) < width_game_element) &&
+        //height and y position
+        ((height_game_element + y_game_element) - (height_player + y_player) > - height_game_element &&
+         (height_game_element + y_game_element) - (height_player + y_player) < height_game_element)) {
+            //characters overlap
+            return true;
+            
     }
     return false;
   }
 }
+
 
 // IsOutOfBounds Function Defined
 bool GameElement::IsOutOfBounds(const Image& image) {
@@ -88,3 +90,6 @@ bool GameElement::IsOutOfBounds(const Image& image) {
   }
   return true;
 }
+
+
+
