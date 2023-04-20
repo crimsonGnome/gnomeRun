@@ -140,6 +140,15 @@ void Game::MoveGameElements() {
   for (int i = 0; i < player_projectile.size(); i++) {
     player_projectile[i]->Move(image);
   }
+  // this is the fire counter looop
+  // if projectile was fired increment counter
+  if(firedCounter_ != 0){
+    firedCounter_++;
+    // if counter == 5 then change to 0
+    if(firedCounter_ % 10 == 0){
+      this->firedCounter_ = 0;
+    }
+  }
 }
 
 void Game::FilterIntersections() {
@@ -269,7 +278,7 @@ void Game::UpdateScreen() {
   Color textColor(0, 0, 0);
 
   // Including the current score of the game
-  image.DrawText(5, 5, scoreToString, 14, textColor);
+  image.DrawText(5, 5, scoreToString, 20, textColor);
   if (status_) {
     // Loop over opponent vector
     for (int i = 0; i < opponent.size(); i++) {
@@ -332,7 +341,7 @@ void Game::OnMouseEvent(const graphics::MouseEvent& event) {
     if (x < 500 && x >= 0 && y >= 0 && y < 800) {
       player.SetX(x - 10);
       player.SetY(y - 25);
-      FirePlayerProjectile(player);
+      
     }
   } else if (event.GetMouseAction() == graphics::MouseAction::kMoved) {
     if (x < 500 && x >= 0 && y >= 0 && y < 800) {
@@ -340,7 +349,9 @@ void Game::OnMouseEvent(const graphics::MouseEvent& event) {
       player.SetY(y - 25);
     }
   } else if (event.GetMouseAction() == graphics::MouseAction::kPressed) {
+    if(firedCounter_ != 0) return;
     FirePlayerProjectile(player);
+    firedCounter_++;
   }
 }
 

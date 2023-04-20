@@ -34,6 +34,7 @@ class Game : public graphics::AnimationEventListener,
   unsigned int gameScreenX_ = 0;
   int backgroundY_ = 0;
   int backgroundX_ = 0;
+  unsigned int firedCounter_ = 0;
 
   // Private Function
   void FirePlayerProjectile(Player&);
