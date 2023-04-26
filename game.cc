@@ -14,18 +14,22 @@ Email: joseph.eggers@csu.fullerton.edu
 #include <memory>
 #include <string>
 #include <vector>
+#include <thread>
+#include <mutex>
 
 #include "cpputils/graphics/image.h"
 #include "opponentCharacter_/opponent.h"
 #include "playerCharacter_/player.h"
 
-using graphics::Image, std::cout, std::string, std::vector, std::unique_ptr;
+using graphics::Image, std::cout, std::string, std::vector, std::unique_ptr, std::thread;
 
 // ---------------- Start of game Class ----------------------------
 // ---------------- Start of Game Constructors ---------------------
 
+std::mutex image_mutex;
+
 Game::Game() {
-  this->gameScreen_.Initialize(800, 700);
+  this->gameScreen_.Initialize(500, 800);
   Player crimsonGnome(375, 50);
   this->player_ = crimsonGnome;
 }
@@ -56,11 +60,11 @@ void Game::CreateOpponents() {
   // Init hoot hoots
 
   vector<unique_ptr<Opponent>>& opponentVector = opponent_;
-  unique_ptr<Opponent> owl0(new Opponent(200, 550));
-  unique_ptr<Opponent> owl1(new Opponent(300, 550));
-  unique_ptr<Opponent> owl2(new Opponent(400, 550));
-  unique_ptr<Opponent> owl3(new Opponent(500, 550));
-  unique_ptr<Opponent> owl4(new Opponent(600, 550));
+  unique_ptr<Opponent> owl0(new Opponent(100, 550));
+  unique_ptr<Opponent> owl1(new Opponent(200, 450));
+  unique_ptr<Opponent> owl2(new Opponent(300, 550));
+  unique_ptr<Opponent> owl3(new Opponent(350, 450));
+  unique_ptr<Opponent> owl4(new Opponent(400, 550));
 
   // Add hoot hoots to array
   opponentVector.push_back(move(owl0));
@@ -70,6 +74,26 @@ void Game::CreateOpponents() {
   opponentVector.push_back(move(owl4));
 
   UpdateScreen();
+}
+
+void BackgroundLoop(int start, int stop, Image& image, Image& background, int backgroundY_){
+  // thread 1 
+    
+    for(unsigned int i = start; i < stop; ++i){
+        
+      for(unsigned int k = 0; k < image.GetWidth(); ++k){
+       
+        // off setting by the middle to draw image
+        int yOffSet = backgroundY_ + i;
+
+        Color backgroundColor = background.GetColor(k, yOffSet % 2400);
+
+        // std::unique_lock<std::mutex> lockChild(image_mutex);
+        image.SetColor(k, i, backgroundColor);
+        
+      }
+      
+    }
 }
 
 void Game::Init() {
@@ -86,12 +110,13 @@ void Game::MoveGameElements() {
   vector<unique_ptr<OpponentProjectile>>& opponent_projectile =
       GetOpponentProjectiles();
   Player& player = GetPlayer();
+  int playerx = player.GetX();
   vector<unique_ptr<PlayerProjectile>>& player_projectile =
       GetPlayerProjectiles();
   // Block owl movements move right or left
   // TODO: ---------------------------------------------------------
   // ---------------------------------------------------------
-  if (opponent[opponent.size() - 1]->GetX() > 740) {
+  if (opponent[opponent.size() - 1]->GetX() > 440) {
     for (int i = 0; i < opponent.size(); i++) {
       opponent[i]->SetMoveDirection(false);
     }
@@ -102,13 +127,27 @@ void Game::MoveGameElements() {
   }
   // Move all the images
   for (int i = 0; i < opponent.size(); i++) {
-    opponent[i]->Move(image);
+    if(opponent[i]->GetIsEvil()){
+      opponent[i]->MoveEvil(image, player.GetX(), player.GetY());
+    } else {
+      opponent[i]->Move(image);
+    }
+    
   }
   // for (int i = 0; i < opponent_projectile.size(); i++) {
   //   opponent_projectile[i]->Move(image);
   // }
   for (int i = 0; i < player_projectile.size(); i++) {
     player_projectile[i]->Move(image);
+  }
+  // this is the fire counter looop
+  // if projectile was fired increment counter
+  if(firedCounter_ != 0){
+    firedCounter_++;
+    // if counter == 5 then change to 0
+    if(firedCounter_ % 10 == 0){
+      this->firedCounter_ = 0;
+    }
   }
 }
 
@@ -123,7 +162,6 @@ void Game::FilterIntersections() {
       this->status_ = false;
     }
   }
-
   vector<unique_ptr<OpponentProjectile>>& opponent_projectile =
       GetOpponentProjectiles();
   // for opponent projectiles and player
@@ -153,6 +191,22 @@ void Game::FilterIntersections() {
       }
     }
   }
+}
+
+// Draw Background Image 
+void Game::DrawBackgroundImage(){
+  Image& image = GetGameScreen();
+  Image background;
+  int backgroundY = backgroundY_;
+  background.Load("background.bmp");
+  // thread 1 
+  BackgroundLoop( 0, 800, image, background, backgroundY);
+
+  this->backgroundY_ = backgroundY_ + 2;
+  if(backgroundY_ >= 2400){
+      backgroundY_ = 1;
+  }
+
 }
 
 void Game::RemoveInactive() {
@@ -209,7 +263,7 @@ void Game::LaunchProjectiles() {
 void Game::UpdateScreen() {
   Image& image = GetGameScreen();
   // Draw Screen white
-  image.DrawRectangle(0, 0, image.GetWidth(), image.GetHeight(), 255, 255, 255);
+  DrawBackgroundImage();
 
   // Intialize vectors objects to loop over
   vector<unique_ptr<Opponent>>& opponent = GetOpponents();
@@ -224,7 +278,7 @@ void Game::UpdateScreen() {
   Color textColor(0, 0, 0);
 
   // Including the current score of the game
-  image.DrawText(5, 5, scoreToString, 14, textColor);
+  image.DrawText(5, 5, scoreToString, 20, textColor);
   if (status_) {
     // Loop over opponent vector
     for (int i = 0; i < opponent.size(); i++) {
@@ -284,18 +338,20 @@ void Game::OnMouseEvent(const graphics::MouseEvent& event) {
   Player& player = GetPlayer();
 
   if (event.GetMouseAction() == graphics::MouseAction::kDragged) {
-    if (x < 800 && x >= 0 && y >= 0 && y < 700) {
+    if (x < 500 && x >= 0 && y >= 0 && y < 800) {
       player.SetX(x - 10);
       player.SetY(y - 25);
-      FirePlayerProjectile(player);
+      
     }
   } else if (event.GetMouseAction() == graphics::MouseAction::kMoved) {
-    if (x < 800 && x >= 0 && y >= 0 && y < 700) {
+    if (x < 500 && x >= 0 && y >= 0 && y < 800) {
       player.SetX(x - 10);
       player.SetY(y - 25);
     }
   } else if (event.GetMouseAction() == graphics::MouseAction::kPressed) {
+    if(firedCounter_ != 0) return;
     FirePlayerProjectile(player);
+    firedCounter_++;
   }
 }
 

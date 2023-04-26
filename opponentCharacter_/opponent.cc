@@ -87,21 +87,21 @@ void Opponent::Draw(Image& image) {
   this->playerPhase_ = playerPhase_ + 1;
 
   if(isEvil_){
-    if(playerPhase_ % 5 == 0){
+    if(playerPhase_ % 1 == 0){
       int temp = playerImageCycle_;
       temp = (temp + 1) % 5;
       this->playerImageCycle_ = temp;
       this->file_ = evilImage_[playerImageCycle_];
     } 
-    if(playerPhase_ % 25 == 0) this->playerPhase_ = 0;
+    if(playerPhase_ % 5 == 0) this->playerPhase_ = 0;
   } else {
-    if(playerPhase_ % 5 == 0){
+    if(playerPhase_ % 2 == 0){
       int temp = playerImageCycle_;
       temp = (temp + 1) % 4;
       this->playerImageCycle_ = temp;
       this->file_ = playerImage_[playerImageCycle_ +  (4 * colorModifier_)];
     } 
-    if(playerPhase_ % 20 == 0) this->playerPhase_ = 0;
+    if(playerPhase_ % 8 == 0) this->playerPhase_ = 0;
   }
   
 }
@@ -119,6 +119,37 @@ void Opponent::Move(const Image& image) {
     this->x_ = x_ - velocity_;
   }
   this->y_--;
+}
+
+// Move Function Defined
+void Opponent::MoveEvil(const Image& image, int x, int y) {
+  if (IsOutOfBounds(image) == true) {
+    is_active_ = false;
+    return;
+  }
+  int moveY = random() % 3 + 1;
+
+  if (movingRight_) {
+    this->x_ = x_ + velocity_;
+  } else {
+    this->x_ = x_ - velocity_;
+  }
+
+  // moveY
+  if(moveY % 3 != 0){
+    if(y_ > y ){
+      this->y_ = y_ - velocity_;
+    } else {
+      this->y_ = y_ + velocity_;
+    }
+  } else {
+    if(y_ > y ){
+      this->y_ = y_ - ( 2 * velocity_);
+    } else {
+      this->y_ = y_ + ( 2 * velocity_);
+    }
+  }
+  
 }
 
 unique_ptr<OpponentProjectile> Opponent::LaunchProjectile() {

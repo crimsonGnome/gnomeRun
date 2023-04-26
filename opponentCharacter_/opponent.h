@@ -65,6 +65,7 @@ class Opponent : public GameElement {
   // all other elements derived from Parent class
   // Move Function
   void Move(const Image& image) override;
+  void MoveEvil(const Image& image, int x, int y);
 
   unique_ptr<OpponentProjectile> LaunchProjectile();
 };
