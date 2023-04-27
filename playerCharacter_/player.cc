@@ -166,10 +166,12 @@ void PlayerProjectile::Draw(Image& image) {
 
 // Defining Move Function
 void PlayerProjectile::Move(const Image& image) {
+  // check to see if image is still in bounds 
   if (IsOutOfBounds(image) == true) {
     is_active_ = false;
     return;
   }
+  // move image
   this->y_ = y_ + velocity_;
 }
 // ---------------- ** Start of Private Methods * --------------------

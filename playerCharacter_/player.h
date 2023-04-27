@@ -62,7 +62,7 @@ class PlayerProjectile : public GameElement {
   void Draw(Image& image) override;
   // Internal functions used by draw
 
-  // Move Function
+  // Move player projectiles
   void Move(const Image& image) override;
 };
 
