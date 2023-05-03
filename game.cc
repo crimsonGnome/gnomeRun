@@ -267,7 +267,7 @@ void Game::UpdateScreen() {
 
   /*If game has not started draw start screen*/
   if (!game_started_) {
-      start_screen_.DrawImage(start_screen_, 0, 0);
+      start_screen_.Draw(start_screen_, 0, 0); 
       start_screen_.Flush();
       return;
   }
