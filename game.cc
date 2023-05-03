@@ -267,10 +267,10 @@ void Game::UpdateScreen() {
 
   /*If game has not started draw start screen*/
   if (!game_started_) {
-      image.DrawImage(start_screen_, 0, 0);
-      image.Flush();
+      Image.DrawImage(start_screen_, 0, 0);
+      Image.Flush();
       return;
-
+  }
   
   Image& image = GetGameScreen();
   // Draw Screen white
@@ -326,7 +326,7 @@ void Game::UpdateScreen() {
     image.DrawText(middleOfWidthScreen, MiddleHeightOfScreen, "Game Over", 50,
                    textColor);
   }
-}
+  }
 
 void Game::OnAnimationStep() {
   Image& image = GetGameScreen();
