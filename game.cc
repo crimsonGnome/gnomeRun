@@ -55,6 +55,8 @@ void Game::FirePlayerProjectile(Player& crimsonGnome) {
 }
 
 // ---------------- Start of Game (Public) Memeber Functions ------
+bool game_started_ = false;
+graphics::Image start_screen_;
 
 void Game::CreateOpponents() {
   // Init hoot hoots
@@ -97,6 +99,7 @@ void BackgroundLoop(int start, int stop, Image& image, Image& background, int ba
 }
 
 void Game::Init() {
+  start_screen_.Load("startscreen.bmp");
   // Setting New player position
   Image& image = GetGameScreen();
   image.AddMouseEventListener(*this);
@@ -261,6 +264,14 @@ void Game::LaunchProjectiles() {
 }
 
 void Game::UpdateScreen() {
+
+  /*If game has not started draw start screen*/
+  if (!game_started_) {
+      image.DrawImage(start_screen_, 0, 0);
+      image.Flush();
+      return;
+
+  
   Image& image = GetGameScreen();
   // Draw Screen white
   DrawBackgroundImage();
@@ -333,6 +344,19 @@ void Game::OnAnimationStep() {
 }
 
 void Game::OnMouseEvent(const graphics::MouseEvent& event) {
+    if (!game_started_) {
+      int x = event.GetX();
+      int y = event.GetY();
+
+      // Check if the mouse click is within the start button coordinates
+      if (event.GetMouseAction() == graphics::MouseAction::kPressed &&
+          x >= 60 && x <= 185 && y >= 380 && y <= 437) {
+        game_started_ = true;
+      }
+
+      return;
+    }
+  
   int x = event.GetX();
   int y = event.GetY();
   Player& player = GetPlayer();
