@@ -43,10 +43,12 @@ class Opponent : public GameElement {
  private:
   int velocity_ = 4;
   bool movingRight_ = true;
+  bool isEvil_ = false;
   int launch_;
   int counter_ = 0; // used for launching projectiles 
   unsigned int playerPhase_;
   vector<string> playerImage_;
+  vector<string> evilImage_;
   unsigned int colorModifier_;
   unsigned int playerImageCycle_;
 
@@ -56,12 +58,14 @@ class Opponent : public GameElement {
   Opponent(int startingX, int startingY);
   void Draw(Image& image) override;
   void SetMoveDirection(bool x) { this->movingRight_ = x; };
-
+  bool GetIsEvil() { return isEvil_; };
+  void SetIsEvil(bool isEvil) {this->isEvil_ = isEvil; };
   int GetLaunch() { return launch_; };
 
   // all other elements derived from Parent class
   // Move Function
   void Move(const Image& image) override;
+  void MoveEvil(const Image& image, int x, int y);
 
   unique_ptr<OpponentProjectile> LaunchProjectile();
 };
