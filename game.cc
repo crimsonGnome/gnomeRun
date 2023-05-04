@@ -39,6 +39,7 @@ Game::Game(int height, int width) {
   Player crimsonGnome(375, 50);
   this->player_ = crimsonGnome;
 }
+
 // ---------------- End of Game Constructors -----------------------
 // ---------------- Start of Game Memeber Functions ----------------
 // ---------------- Start of Game (Private) Memeber Functions ------
@@ -268,7 +269,8 @@ void Game::UpdateScreen() {
   /*If game has not started draw start screen*/
   if (!game_started_) {
       start_screen_.Load("startscreen.bmp");
-     //start_screen_.Flush();
+      gameScreen_.Draw(start_screen_, 0, 0);
+      gameScreen_.Flush();
       return;
   }
   
