@@ -266,15 +266,19 @@ void Game::LaunchProjectiles() {
 
 void Game::UpdateScreen() {
 
-  /*If game has not started draw start screen*/
+  Image& image = GetGameScreen();
+
   if (!game_started_) {
-      start_screen_.Load("startscreen.bmp");
-      gameScreen_.Draw(start_screen_, 0, 0);
-      gameScreen_.Flush();
-      return;
+    for (unsigned int i = 0; i < image.GetHeight(); ++i) {
+      for (unsigned int j = 0; j < image.GetWidth(); ++j) {
+        Color color = start_screen_.GetColor(j, i);
+        image.SetColor(j, i, color);
+      }
+    }
+    image.Flush();
+    return;
   }
   
-  Image& image = GetGameScreen();
   // Draw Screen white
   DrawBackgroundImage();
 
