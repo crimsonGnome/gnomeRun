@@ -48,6 +48,28 @@ Opponent::Opponent(int startingX, int startingY)
   // Draw character
   
 }
+// update image cyle to the next image 
+void Opponent::UpdateImageCycle(){
+  this->playerPhase_ = playerPhase_ + 1;
+
+  if(isEvil_){
+    if(playerPhase_ % 1 == 0){
+      int temp = playerImageCycle_;
+      temp = (temp + 1) % 5;
+      this->playerImageCycle_ = temp;
+      this->file_ = evilImage_[playerImageCycle_];
+    } 
+    if(playerPhase_ % 5 == 0) this->playerPhase_ = 0;
+  } else {
+    if(playerPhase_ % 2 == 0){
+      int temp = playerImageCycle_;
+      temp = (temp + 1) % 4;
+      this->playerImageCycle_ = temp;
+      this->file_ = playerImage_[playerImageCycle_ +  (4 * colorModifier_)];
+    } 
+    if(playerPhase_ % 8 == 0) this->playerPhase_ = 0;
+  }
+}
 
 // code from milestone one to Draw Opponent
 void Opponent::Draw(Image& image) {
@@ -84,25 +106,8 @@ void Opponent::Draw(Image& image) {
     }
   }
   this->coordsUpdated_ = false;
-  this->playerPhase_ = playerPhase_ + 1;
-
-  if(isEvil_){
-    if(playerPhase_ % 1 == 0){
-      int temp = playerImageCycle_;
-      temp = (temp + 1) % 5;
-      this->playerImageCycle_ = temp;
-      this->file_ = evilImage_[playerImageCycle_];
-    } 
-    if(playerPhase_ % 5 == 0) this->playerPhase_ = 0;
-  } else {
-    if(playerPhase_ % 2 == 0){
-      int temp = playerImageCycle_;
-      temp = (temp + 1) % 4;
-      this->playerImageCycle_ = temp;
-      this->file_ = playerImage_[playerImageCycle_ +  (4 * colorModifier_)];
-    } 
-    if(playerPhase_ % 8 == 0) this->playerPhase_ = 0;
-  }
+  
+  UpdateImageCycle();
   
 }
 
@@ -175,6 +180,7 @@ unique_ptr<OpponentProjectile> Opponent::LaunchProjectile() {
 //
 
 // Beginning functions for OpponentProjectile
+// Not going to be implemented by these base version with this enemy
 // ---------------------- * Constructors * ----------------------
 OpponentProjectile::OpponentProjectile() : GameElement(0, 0, 5, 5) {
   this->coordsUpdated_ = false;
@@ -244,7 +250,7 @@ void OpponentProjectile::Draw(Image& image) {
   this->coordsUpdated_ = false;
 }
 
-// Move Function Defined
+// Not going to be used
 void OpponentProjectile::Move(const Image& image) {
   if (IsOutOfBounds(image) == true) {
     is_active_ = false;

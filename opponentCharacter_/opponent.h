@@ -18,12 +18,14 @@ Email: joseph.eggers@csu.fullerton.edu
 
 using graphics::Image, std::string, std::unique_ptr, std::vector;
 
+// not going to be used
 class OpponentProjectile : public GameElement {
  private:
   double velocity_ = 10;
   double time_ = .1;
   double truePosition_;
 
+  
  public:
   // Constructors
   OpponentProjectile();
@@ -51,6 +53,10 @@ class Opponent : public GameElement {
   vector<string> evilImage_;
   unsigned int colorModifier_;
   unsigned int playerImageCycle_;
+
+  // Private Memebers
+  void UpdateImageCycle();
+
 
  public:
   // Constructors

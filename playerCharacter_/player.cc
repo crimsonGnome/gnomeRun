@@ -98,7 +98,7 @@ void Player::Draw(Image& image) {
   
   // Flags that to the Game Engine that the changes have not been included
   this->coordsUpdated_ = false;
-  // update cords after drawiing 
+  // update image to the next one after drawiing 
   UpdateImageCycle();
 }
 
