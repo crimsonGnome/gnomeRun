@@ -29,7 +29,7 @@ class GameElement {
 
  public:
   // Constructors
-  GameElement() { x_ = 0, y_ = 0, width_ = 50, height_ = 50; }
+  GameElement() { x_ = 24, y_ = 15, width_ = 67, height_ = 60; }
   GameElement(int startingX, int startingY, int kWidth, int kHeight);
   // Getters
   int GetX();

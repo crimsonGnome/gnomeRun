@@ -19,7 +19,7 @@ using graphics::Image, graphics::Color, std::unique_ptr, std::vector;
 
 // -------------------- * Constructors * ---------------------
 
-Opponent::Opponent() : GameElement(0, 0, 50, 50), playerImage_ {"opponentCharacter_/greenboi1.bmp","opponentCharacter_/greenboi2.bmp","opponentCharacter_/greenboi3.bmp","opponentCharacter_/greenboi4.bmp",
+Opponent::Opponent() : GameElement(0, 0, 75, 75), playerImage_ {"opponentCharacter_/greenboi1.bmp","opponentCharacter_/greenboi2.bmp","opponentCharacter_/greenboi3.bmp","opponentCharacter_/greenboi4.bmp",
                                                                 "opponentCharacter_/orangeboi1.bmp","opponentCharacter_/orangeboi2.bmp","opponentCharacter_/orangeboi3.bmp","opponentCharacter_/orangeboi4.bmp"                         
   } {
   this->coordsUpdated_ = false;
@@ -34,7 +34,7 @@ Opponent::Opponent() : GameElement(0, 0, 50, 50), playerImage_ {"opponentCharact
 }
 
 Opponent::Opponent(int startingX, int startingY)
-    : GameElement(startingX, startingY, 50, 50), playerImage_ {"opponentCharacter_/greenboi1.bmp","opponentCharacter_/greenboi2.bmp","opponentCharacter_/greenboi3.bmp","opponentCharacter_/greenboi4.bmp",
+    : GameElement(startingX, startingY, 75, 75), playerImage_ {"opponentCharacter_/greenboi1.bmp","opponentCharacter_/greenboi2.bmp","opponentCharacter_/greenboi3.bmp","opponentCharacter_/greenboi4.bmp",
                                                                 "opponentCharacter_/orangeboi1.bmp","opponentCharacter_/orangeboi2.bmp","opponentCharacter_/orangeboi3.bmp","opponentCharacter_/orangeboi4.bmp"                         
                                               } , evilImage_ {"opponentCharacter_/evilfairy1.bmp","opponentCharacter_/evilfairy2.bmp","opponentCharacter_/evilfairy3.bmp","opponentCharacter_/evilfairy4.bmp","opponentCharacter_/evilfairy5.bmp"}
   {

@@ -23,7 +23,8 @@ using graphics::Image, graphics::Color, std::cin, std::cout, std::endl,
 // ---------------- * Constructors * -------------------------
 
 // Default Constructor
-Player::Player() : GameElement(0, 0, 20, 50), playerImage_ {"playerCharacter_/gnome1","playerCharacter_/gnome2","playerCharacter_/gnome3","playerCharacter_/gnome4"} {
+    //the player size is 85 because that is what worked, my theory is that the pixel size difference is different on here vs firealpaca
+Player::Player() : GameElement(60, 0, 70, 70), playerImage_ {"playerCharacter_/gnome1","playerCharacter_/gnome2","playerCharacter_/gnome3","playerCharacter_/gnome4"} {
   this->coordsUpdated_ = false;
   this->file_ = "gnome1";
   this->playerImageCycle_ = 0;
@@ -36,7 +37,7 @@ Player::Player() : GameElement(0, 0, 20, 50), playerImage_ {"playerCharacter_/gn
 
 // Constructor
 Player::Player(int startingX, int startingY)
-    : GameElement(startingX, startingY, 20, 50), playerImage_ {"playerCharacter_/gnome1","playerCharacter_/gnome2","playerCharacter_/gnome3","playerCharacter_/gnome4"} {
+    : GameElement(startingX, startingY, 70, 70), playerImage_ {"playerCharacter_/gnome1","playerCharacter_/gnome2","playerCharacter_/gnome3","playerCharacter_/gnome4"} {
   this->coordsUpdated_ = true;
   this->playerImageCycle_ = 0;
   this->frequenceyOfImageCycle_ = 1;
@@ -111,7 +112,7 @@ void Player::Move(const Image& image) {}
 // ---------------- * Constructors * -------------------------
 
 // Default Constructor
-PlayerProjectile::PlayerProjectile() : GameElement(0, 0, 5, 5) {
+PlayerProjectile::PlayerProjectile() : GameElement(0, 0, 6, 10) {
   this->coordsUpdated_ = false;
   this->file_ = "newbullet.bmp";
   // Draw Character
@@ -120,7 +121,7 @@ PlayerProjectile::PlayerProjectile() : GameElement(0, 0, 5, 5) {
 
 // Constructor
 PlayerProjectile::PlayerProjectile(int startingX, int startingY)
-    : GameElement(startingX, startingY, 5, 5) {
+    : GameElement(startingX, startingY, 6, 10) {
   this->coordsUpdated_ = true;
   this->file_ = "newbullet.bmp";
   // Draw Character
