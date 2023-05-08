@@ -28,6 +28,7 @@ Player::Player() : GameElement(60, 0, 70, 70), playerImage_ {"playerCharacter_/g
   this->coordsUpdated_ = false;
   this->file_ = "gnome1";
   this->playerImageCycle_ = 0;
+  this->frequenceyOfImageCycle_ = 1;
   this->file_ = playerImage_[playerImageCycle_];
   
   // Draw Character
@@ -39,9 +40,26 @@ Player::Player(int startingX, int startingY)
     : GameElement(startingX, startingY, 70, 70), playerImage_ {"playerCharacter_/gnome1","playerCharacter_/gnome2","playerCharacter_/gnome3","playerCharacter_/gnome4"} {
   this->coordsUpdated_ = true;
   this->playerImageCycle_ = 0;
+  this->frequenceyOfImageCycle_ = 1;
   this->file_ = playerImage_[playerImageCycle_];
   // Draw Character
 }
+
+void Player::UpdateImageCycle(){
+  // Code  Block for icrementing the image
+  this->playerPhase_ = playerPhase_ + 1;
+
+  // if you need to adjust the frequency 
+  if(playerPhase_ % frequenceyOfImageCycle_ == 0){
+    int temp = playerImageCycle_;
+    temp = (temp + 1) % 4;
+    this->playerImageCycle_ = temp;
+    this->file_ = playerImage_[playerImageCycle_];
+  } 
+  if(playerPhase_ % 8 == 0) this->playerPhase_ = 0;
+}
+
+
 // Draw Character onto image
 void Player::Draw(Image& image) {
   // Initilize Images
@@ -78,22 +96,15 @@ void Player::Draw(Image& image) {
       }
     }
   }
+  
+  // Flags that to the Game Engine that the changes have not been included
   this->coordsUpdated_ = false;
-  // Code for icrementing the image
-  this->playerPhase_ = playerPhase_ + 1;
-  if(playerPhase_ % 1 == 0){
-    int temp = playerImageCycle_;
-    temp = (temp + 1) % 4;
-    this->playerImageCycle_ = temp;
-    this->file_ = playerImage_[playerImageCycle_];
-  } 
-  if(playerPhase_ % 8 == 0) this->playerPhase_ = 0;
+  // update image to the next one after drawiing 
+  UpdateImageCycle();
 }
 
-// Defining Move Function
-void Player::Move(const Image& image) {
-  // implememt later
-}
+ // listens to mouse events 
+void Player::Move(const Image& image) {}
 //
 // ---------- *** PlayerProjectile Class Start *** ----------------
 // ---------------- ** Start of Public Methods * ---------------------
@@ -103,18 +114,18 @@ void Player::Move(const Image& image) {
 // Default Constructor
 PlayerProjectile::PlayerProjectile() : GameElement(0, 0, 6, 10) {
   this->coordsUpdated_ = false;
-  this->file_ = "playerProjectile";
+  this->file_ = "newbullet.bmp";
   // Draw Character
-  makeProjectile();
+  
 }
 
 // Constructor
 PlayerProjectile::PlayerProjectile(int startingX, int startingY)
     : GameElement(startingX, startingY, 6, 10) {
   this->coordsUpdated_ = true;
-  this->file_ = "playerProjectile";
+  this->file_ = "newbullet.bmp";
   // Draw Character
-  makeProjectile();
+  
 }
 
 // ---------------- * Public Methods  * -------------------------
@@ -156,26 +167,12 @@ void PlayerProjectile::Draw(Image& image) {
 
 // Defining Move Function
 void PlayerProjectile::Move(const Image& image) {
+  // check to see if image is still in bounds 
   if (IsOutOfBounds(image) == true) {
     is_active_ = false;
     return;
   }
+  // move image
   this->y_ = y_ + velocity_;
 }
 // ---------------- ** Start of Private Methods * --------------------
-void PlayerProjectile::makeProjectile() {
-  Color center(153, 217, 234);
-  Color second(78, 171, 252);
-  Image image(width_, height_);
-  for (int x = 0; x < width_; x++) {
-    for (int y = 0; y < height_; y++) {
-      int random = rand() % 3 + 1;
-      if (random % 3 == 0) {
-        image.SetColor(x, y, second);
-      } else {
-        image.SetColor(x, y, center);
-      }
-    }
-  }
-  image.SaveImageBmp(file_);
-}

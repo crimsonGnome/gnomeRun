@@ -25,9 +25,13 @@ class Player : public GameElement {
   unsigned int playerPhase_;
   vector<string> playerImage_;
   unsigned int playerImageCycle_;
+
+  // frequency affects the frame rate of gnome. currnely set to 1 in constructor
+  // 1 frame shift per gnome
+  unsigned int frequenceyOfImageCycle_;
  
   // Mehtod we have to add
-  // We have to create this code.
+  void UpdateImageCycle();
 
  public:
   // Constructors
@@ -45,7 +49,7 @@ class PlayerProjectile : public GameElement {
  private:
   double velocity_ = 10;
   // Private Member
-  void makeProjectile();
+ 
 
  public:
   // Constructors
@@ -58,7 +62,7 @@ class PlayerProjectile : public GameElement {
   void Draw(Image& image) override;
   // Internal functions used by draw
 
-  // Move Function
+  // Move player projectiles
   void Move(const Image& image) override;
 };
 
