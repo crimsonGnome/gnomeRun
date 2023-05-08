@@ -39,6 +39,7 @@ Game::Game(int height, int width) {
   Player crimsonGnome(375, 50);
   this->player_ = crimsonGnome;
 }
+
 // ---------------- End of Game Constructors -----------------------
 // ---------------- Start of Game Memeber Functions ----------------
 // ---------------- Start of Game (Private) Memeber Functions ------
@@ -55,6 +56,8 @@ void Game::FirePlayerProjectile(Player& crimsonGnome) {
 }
 
 // ---------------- Start of Game (Public) Memeber Functions ------
+bool game_started_ = false;
+graphics::Image start_screen_;
 
 void Game::CreateOpponents() {
   // Init hoot hoots
@@ -97,6 +100,7 @@ void BackgroundLoop(int start, int stop, Image& image, Image& background, int ba
 }
 
 void Game::Init() {
+  start_screen_.Load("startscreen.bmp");
   // Setting New player position
   Image& image = GetGameScreen();
   image.AddMouseEventListener(*this);
@@ -261,7 +265,20 @@ void Game::LaunchProjectiles() {
 }
 
 void Game::UpdateScreen() {
+
   Image& image = GetGameScreen();
+
+  if (!game_started_) {
+    for (unsigned int i = 0; i < image.GetHeight(); ++i) {
+      for (unsigned int j = 0; j < image.GetWidth(); ++j) {
+        Color color = start_screen_.GetColor(j, i);
+        image.SetColor(j, i, color);
+      }
+    }
+    image.Flush();
+    return;
+  }
+  
   // Draw Screen white
   DrawBackgroundImage();
 
@@ -315,7 +332,7 @@ void Game::UpdateScreen() {
     image.DrawText(middleOfWidthScreen, MiddleHeightOfScreen, "Game Over", 50,
                    textColor);
   }
-}
+  }
 
 void Game::OnAnimationStep() {
   Image& image = GetGameScreen();
@@ -333,6 +350,19 @@ void Game::OnAnimationStep() {
 }
 
 void Game::OnMouseEvent(const graphics::MouseEvent& event) {
+    if (!game_started_) {
+      int x = event.GetX();
+      int y = event.GetY();
+
+      // Check if the mouse click is within the start button coordinates
+      if (event.GetMouseAction() == graphics::MouseAction::kPressed &&
+          x >= 60 && x <= 185 && y >= 380 && y <= 437) {
+        game_started_ = true;
+      }
+
+      return;
+    }
+  
   int x = event.GetX();
   int y = event.GetY();
   Player& player = GetPlayer();
