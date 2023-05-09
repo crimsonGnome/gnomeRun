@@ -35,10 +35,12 @@ class Game : public graphics::AnimationEventListener,
   int backgroundY_ = 0;
   int backgroundX_ = 0;
   unsigned int firedCounter_ = 0;
+  bool game_started_ = false;
 
   // Private Function
   void FirePlayerProjectile(Player&);
   void DrawBackgroundImage();
+  void Restart();
 
 
  public:

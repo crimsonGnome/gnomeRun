@@ -14,19 +14,18 @@ Email: joseph.eggers@csu.fullerton.edu
 #include <memory>
 #include <string>
 #include <vector>
-#include <thread>
-#include <mutex>
+
 
 #include "cpputils/graphics/image.h"
 #include "opponentCharacter_/opponent.h"
 #include "playerCharacter_/player.h"
 
-using graphics::Image, std::cout, std::string, std::vector, std::unique_ptr, std::thread;
+using graphics::Image, std::cout, std::string, std::vector, std::unique_ptr;
 
 // ---------------- Start of game Class ----------------------------
 // ---------------- Start of Game Constructors ---------------------
 
-std::mutex image_mutex;
+
 
 Game::Game() {
   this->gameScreen_.Initialize(500, 800);
@@ -56,7 +55,6 @@ void Game::FirePlayerProjectile(Player& crimsonGnome) {
 }
 
 // ---------------- Start of Game (Public) Memeber Functions ------
-bool game_started_ = false;
 graphics::Image start_screen_;
 
 void Game::CreateOpponents() {
@@ -91,7 +89,6 @@ void BackgroundLoop(int start, int stop, Image& image, Image& background, int ba
 
         Color backgroundColor = background.GetColor(k, yOffSet % 2400);
 
-        // std::unique_lock<std::mutex> lockChild(image_mutex);
         image.SetColor(k, i, backgroundColor);
         
       }
@@ -267,6 +264,7 @@ void Game::LaunchProjectiles() {
 void Game::UpdateScreen() {
 
   Image& image = GetGameScreen();
+  Color textColor(255, 255, 255);
 
   if (!game_started_) {
     for (unsigned int i = 0; i < image.GetHeight(); ++i) {
@@ -275,6 +273,8 @@ void Game::UpdateScreen() {
         image.SetColor(j, i, color);
       }
     }
+    // Draw Title of the the game
+    image.DrawText(30, 30, "Gnome Run", 100, 255, 255, 255);
     image.Flush();
     return;
   }
@@ -292,10 +292,10 @@ void Game::UpdateScreen() {
 
   // Intialize the color of the text and turn the int score into string
   string scoreToString = std::to_string(score_);
-  Color textColor(0, 0, 0);
+  
 
   // Including the current score of the game
-  image.DrawText(5, 5, scoreToString, 20, textColor);
+  image.DrawText(5, 5, scoreToString, 30, textColor);
   if (status_) {
     // Loop over opponent vector
     for (int i = 0; i < opponent.size(); i++) {
@@ -323,14 +323,15 @@ void Game::UpdateScreen() {
     // if the player lost. Display game Screen
     // Get the middle of the screen for height and width.
     int middleOfWidthScreen = (image.GetWidth() / 2) - 100;
-    int MiddleHeightOfScreen = (image.GetHeight() / 2) - 25;
+    int MiddleHeightOfScreen = (image.GetHeight() / 3) - 25;
     for (int i = 0; i < opponent.size(); i++) {
       if (opponent[i]->GetIsActive() == true) {
         opponent[i]->Draw(image);
       }
     }
-    image.DrawText(middleOfWidthScreen, MiddleHeightOfScreen, "Game Over", 50,
+    image.DrawText(middleOfWidthScreen, MiddleHeightOfScreen, "Game Over\n Main Menu", 50,
                    textColor);
+          
   }
   }
 
@@ -340,11 +341,12 @@ void Game::OnAnimationStep() {
   if (opponent.size() == 0) {
     CreateOpponents();
   }
-  
-  MoveGameElements();
-  // LaunchProjectiles(); // Removing look 
-  FilterIntersections();
-  RemoveInactive();
+  if(game_started_){
+    MoveGameElements();
+    // LaunchProjectiles(); // Removing look 
+    FilterIntersections();
+    RemoveInactive();
+  }
   UpdateScreen();
   image.Flush();
 }
@@ -366,7 +368,15 @@ void Game::OnMouseEvent(const graphics::MouseEvent& event) {
   int x = event.GetX();
   int y = event.GetY();
   Player& player = GetPlayer();
-
+  if(!status_){
+    Image& image = GetGameScreen();
+    int ystart = (image.GetHeight() / 3) - 25 + 50;
+    int xstart =  (image.GetWidth() / 2) - 100;
+    if (event.GetMouseAction() == graphics::MouseAction::kPressed &&
+      x >= xstart && x <= xstart + 230 && y >= ystart && y <= ystart + 50 ){
+        Restart();
+    }
+  }
   if (event.GetMouseAction() == graphics::MouseAction::kDragged) {
     if (x < 500 && x >= 0 && y >= 0 && y < 800) {
       player.SetX(x - 10);
@@ -383,6 +393,24 @@ void Game::OnMouseEvent(const graphics::MouseEvent& event) {
     FirePlayerProjectile(player);
     firedCounter_++;
   }
+}
+void Game::Restart(){
+  // Restarting games to intial condition.
+  score_ = 0;
+  status_ = true;
+  backgroundY_ = 0;
+  backgroundX_ = 0;
+  firedCounter_ = 0;
+  game_started_ = false;
+
+  // Emmpty all the projectetiles 
+  opponentProjectile_.clear();
+  opponent_.clear();
+  playerProjectile_.clear();
+
+  // Restart Player
+  player_.SetIsActive(true);
+  
 }
 
 void Game::Start() {
