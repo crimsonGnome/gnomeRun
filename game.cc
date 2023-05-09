@@ -1,13 +1,34 @@
-/*
-Name: Destiny Bonillas
-CWID: 887190072
-Email: destinybonillas@csu.fullerton.edu
+/*=====================================================================================================================
+Program name: "Gnome Run"
+ Copyright (C) 2023.                                                                           
+                                                                                                                          
+This file is part of the software program "Gnome Run".
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License   
+version 3 as published by the Free Software Foundation.                                                                    
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied          
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.     
+A copy of the GNU General Public License v3 is available here:  <https:;www.gnu.org/licenses/>.                            
+=========================================================================================================================
 
-Name: Joseph Eggers
-CWID: 885939488
-Email: joseph.eggers@csu.fullerton.edu
-*/
+Author information
+Author name: Joseph Eggers, Destiny Bonillas, Marriam Jawaid, Aubrianna Sample
 
+Program information
+  Program name: Gnome Run
+  Programming languages: C++
+  Date program began: 2023 February 07
+  Date of last update: 2023 May 03
+  Date of reorganization of comments: 2023 May 08
+  Files in this program: game_element, game, player, opponent, main
+  Status: Finished.  The program was tested extensively with no errors in Ubuntu 20.04
+This file
+   File name: game.cc
+   Language: C++
+   Build: sh build.sh
+   Run: ./main
+   Type: Class
+   Purpose: Creates game characters, initalizes game screen, deals with animation and mouse events, keeps track of player score
+======================================================================================================== */
 #include "game.h"
 
 #include <iostream>
