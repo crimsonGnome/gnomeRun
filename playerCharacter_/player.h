@@ -47,7 +47,7 @@ class Player : public GameElement {
 // Player projectile
 class PlayerProjectile : public GameElement {
  private:
-  double velocity_ = 10;
+  double velocity_ = 20;
   // Private Member
  
 

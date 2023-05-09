@@ -49,7 +49,7 @@ void Game::FirePlayerProjectile(Player& crimsonGnome) {
       GetPlayerProjectiles();
   // Create a unique pointer to player projectile
   unique_ptr<PlayerProjectile> beam(
-      new PlayerProjectile(crimsonGnome.GetX(), crimsonGnome.GetY()));
+      new PlayerProjectile(crimsonGnome.GetX() + crimsonGnome.GetWidth() + 10, crimsonGnome.GetY() + 50));
   // Push player projectile to vector
   playerProjectileVect.push_back(move(beam));
 }
@@ -61,11 +61,11 @@ void Game::CreateOpponents() {
   // Init hoot hoots
 
   vector<unique_ptr<Opponent>>& opponentVector = opponent_;
-  unique_ptr<Opponent> owl0(new Opponent(100, 550));
-  unique_ptr<Opponent> owl1(new Opponent(200, 450));
-  unique_ptr<Opponent> owl2(new Opponent(300, 550));
-  unique_ptr<Opponent> owl3(new Opponent(350, 450));
-  unique_ptr<Opponent> owl4(new Opponent(400, 550));
+  unique_ptr<Opponent> owl0(new Opponent(100, 650));
+  unique_ptr<Opponent> owl1(new Opponent(200, 550));
+  unique_ptr<Opponent> owl2(new Opponent(300, 650));
+  unique_ptr<Opponent> owl3(new Opponent(350, 550));
+  unique_ptr<Opponent> owl4(new Opponent(400, 650));
 
   // Add hoot hoots to array
   opponentVector.push_back(move(owl0));
@@ -129,7 +129,7 @@ void Game::MoveGameElements() {
   // Move all the images
   for (int i = 0; i < opponent.size(); i++) {
     if(opponent[i]->GetIsEvil()){
-      opponent[i]->MoveEvil(image, player.GetX(), player.GetY());
+      opponent[i]->MoveEvil(image, player.GetX(), player.GetY(), GetScore());
     } else {
       opponent[i]->Move(image);
     }
@@ -146,7 +146,7 @@ void Game::MoveGameElements() {
   if(firedCounter_ != 0){
     firedCounter_++;
     // if counter == 5 then change to 0
-    if(firedCounter_ % 10 == 0){
+    if(firedCounter_ % 7 == 0){
       this->firedCounter_ = 0;
     }
   }
@@ -338,7 +338,7 @@ void Game::UpdateScreen() {
 void Game::OnAnimationStep() {
   Image& image = GetGameScreen();
   vector<unique_ptr<Opponent>>& opponent = GetOpponents();
-  if (opponent.size() == 0) {
+  if (opponent.size() <= 3) {
     CreateOpponents();
   }
   if(game_started_){

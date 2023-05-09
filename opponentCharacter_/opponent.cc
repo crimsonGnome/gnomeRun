@@ -127,7 +127,8 @@ void Opponent::Move(const Image& image) {
 }
 
 // Move Function Defined
-void Opponent::MoveEvil(const Image& image, int x, int y) {
+void Opponent::MoveEvil(const Image& image, int x, int y, int score ) {
+  int newVelocity = velocity_+ (score / 10);
   if (IsOutOfBounds(image) == true) {
     is_active_ = false;
     return;
@@ -135,23 +136,23 @@ void Opponent::MoveEvil(const Image& image, int x, int y) {
   int moveY = random() % 3 + 1;
 
   if (movingRight_) {
-    this->x_ = x_ + velocity_;
+    this->x_ = x_ + newVelocity;
   } else {
-    this->x_ = x_ - velocity_;
+    this->x_ = x_ - newVelocity;
   }
 
   // moveY
   if(moveY % 3 != 0){
     if(y_ > y ){
-      this->y_ = y_ - velocity_;
+      this->y_ = y_ - newVelocity;
     } else {
-      this->y_ = y_ + velocity_;
+      this->y_ = y_ + newVelocity;
     }
   } else {
     if(y_ > y ){
-      this->y_ = y_ - ( 2 * velocity_);
+      this->y_ = y_ - ( 2 * newVelocity);
     } else {
-      this->y_ = y_ + ( 2 * velocity_);
+      this->y_ = y_ + ( 2 * newVelocity);
     }
   }
   
