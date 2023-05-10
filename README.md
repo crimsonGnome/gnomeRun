@@ -1,6 +1,7 @@
-** GNOME RUN **
+### GNOME RUN ###
 
 *Intro*
+
 As the sun sets over the forest, a lone gnome emerges from his home, gripping his trusty sling tightly. He knows he must act quickly if he is to save his beloved forest from the evil fairies that have been wreaking havoc upon it.
 
 With determination in his heart, the gnome sets off into the dense thicket, the sounds of rustling leaves and snapping twigs filling the air around him. As he runs deeper into the forest, his senses sharpen and his eyes adjust to the dimming light, scanning for any sign of danger.
