@@ -20,3 +20,10 @@ mouse controls - gnome
 *Opening the game*
 
 Launching the game by clicking "Gnome Run" or by lauching "Gnome Run" from the command line
+
+*Building the game from source*
+you can edit the files and rebuild the game by running "sh build.sh"
+
+*Dependecies*
+to rebuild from source code you will need to install "libX11-dev"
+Built on c++
